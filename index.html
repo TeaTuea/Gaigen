@@ -191,7 +191,7 @@
   <!-- Language Selection -->
   <div id="language-select" aria-label="Select language">
     <button type="button" id="lang-en" aria-pressed="false">English</button>
-    <button type="button" id="lang-lt" aria-pressed="false">Lietuvių kalba</button>
+    <button type="button" id="lang-lt" aria-pressed="false">Lietuvių</button>
   </div>
 
   <!-- Reservation Form (English) -->
@@ -201,7 +201,7 @@
     <label for="resName-en">Reservation Name *</label>
     <input type="text" id="resName-en" name="reservation_name" required autocomplete="name" />
 
-    <label for="people-en">People Amount (1-6) *</label>
+    <label for="people-en">People *</label>
     <input type="number" id="people-en" name="people_amount" min="1" max="6" value="1" required />
 
     <label for="date-en">Date *</label>
@@ -213,13 +213,13 @@
     <label for="email-en">Email *</label>
     <input type="email" id="email-en" name="email" autocomplete="email" required />
 
-    <label>Food Selection (optional)</label>
+    <label>Food Selection</label>
     <div id="food-list-en"></div>
     <button type="button" id="add-food-btn-en">+ Add Item</button>
 
     <label class="checkbox-label" for="tos-en">
       <input type="checkbox" id="tos-en" name="tos" required />
-      I agree to the <a href="https://www.google.com" target="_blank" rel="noopener noreferrer">Terms of Service</a>
+      I agree to the <a href="https://www.google.com" target="_blank" rel="noopener noreferrer">&nbsp;Terms of Service</a>
     </label>
 
     <div id="error-en" class="error-message"></div>
@@ -234,7 +234,7 @@
     <label for="resName-lt">Rezervacijos vardas *</label>
     <input type="text" id="resName-lt" name="reservation_name" required autocomplete="name" />
 
-    <label for="people-lt">Žmonių kiekis (1-6) *</label>
+    <label for="people-lt">Žmonių kiekis *</label>
     <input type="number" id="people-lt" name="people_amount" min="1" max="6" value="1" required />
 
     <label for="date-lt">Data *</label>
@@ -246,13 +246,13 @@
     <label for="email-lt">El. paštas *</label>
     <input type="email" id="email-lt" name="email" autocomplete="email" required />
 
-    <label>Maisto pasirinkimas (neprivaloma)</label>
+    <label>Maisto pasirinkima</label>
     <div id="food-list-lt"></div>
     <button type="button" id="add-food-btn-lt">+ Pridėti</button>
 
     <label class="checkbox-label" for="tos-lt">
       <input type="checkbox" id="tos-lt" name="tos" required />
-      Sutinku su <a href="https://www.google.com" target="_blank" rel="noopener noreferrer">Naudojimo sąlygomis</a>
+      Sutinku su <a href="https://www.google.com" target="_blank" rel="noopener noreferrer">&nbsp;Naudojimo sąlygomis</a>
     </label>
 
     <div id="error-lt" class="error-message"></div>
