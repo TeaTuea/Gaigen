@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Reservation Form</title>
+<style>
+  /* Reset & basics */
+  body {
+    font-family: Arial, sans-serif;
+    background: #fff;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+  }
+  .container {
+    background: #f4f4f4;
+    padding: 30px 30px 40px;
+    border-radius: 8px;
+    max-width: 440px;
+    width: 100%;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 24px;
+    font-weight: 700;
+    color: #333;
+  }
+  /* Language selection */
+  #language-select {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  #language-select button {
+    flex: 1;
+    padding: 15px 0;
+    font-size: 18px;
+    font-weight: 600;
+    border: 2px solid #007BFF;
+    background: white;
+    color: #007BFF;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  #language-select button:hover,
+  #language-select button:focus {
+    background-color: #007BFF;
+    color: white;
+    outline: none;
+  }
+  /* Form styling */
+  form {
+    display: none;
+    flex-direction: column;
+  }
+  form.active {
+    display: flex;
+  }
+  label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    margin-top: 14px;
+    color: #555;
+  }
+  input[type="text"],
+  input[type="email"],
+  input[type="number"],
+  input[type="date"],
+  input[type="time"],
+  select {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+  }
+  input[type="text"]:focus,
+  input[type="email"]:focus,
+  input[type="number"]:focus,
+  input[type="date"]:focus,
+  input[type="time"]:focus,
+  select:focus {
+    border-color: #007BFF;
+    outline: none;
+  }
+  .food-item {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+    align-items: center;
+  }
+  .food-item select,
+  .food-item input[type="number"] {
+    flex: 1;
+  }
+  .food-item input[type="number"] {
+    max-width: 80px;
+  }
+  .food-item button.remove-item {
+    background: #dc3545;
+    border: none;
+    color: white;
+    padding: 6px 10px;
+    font-weight: 700;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  .food-item button.remove-item:hover {
+    background: #a71d2a;
+  }
+  #add-food-btn {
+    margin-top: 12px;
+    background-color: #007BFF;
+    border: none;
+    color: white;
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  #add-food-btn:hover {
+    background-color: #0056b3;
+  }
+  button[type="submit"] {
+    margin-top: 24px;
+    background-color: #28a745;
+    border: none;
+    color: white;
+    padding: 14px;
+    font-weight: 700;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  button[type="submit"]:hover {
+    background-color: #1e7e34;
+  }
+  .error-message {
+    color: red;
+    margin-top: 10px;
+    display: none;
+    font-weight: 600;
+  }
+  /* Terms */
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+    margin-top: 16px;
+    font-weight: 600;
+    color: #555;
+  }
+  .checkbox-label input[type="checkbox"] {
+    margin-right: 10px;
+  }
+  .checkbox-label a {
+    color: #007BFF;
+    text-decoration: none;
+  }
+  .checkbox-label a:hover {
+    text-decoration: underline;
+  }
+  /* Responsive */
+  @media (max-width: 480px) {
+    .food-item {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .food-item select,
+    .food-item input[type="number"],
+    .food-item button.remove-item {
+      width: 100%;
+      max-width: none;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Language Selection -->
+  <div id="language-select" aria-label="Select language">
+    <button type="button" id="lang-en" aria-pressed="false">English</button>
+    <button type="button" id="lang-lt" aria-pressed="false">Lietuvių kalba</button>
+  </div>
+
+  <!-- Reservation Form (English) -->
+  <form id="form-en" class="reservation-form" novalidate>
+    <h1>Reservation Form</h1>
+
+    <label for="resName-en">Reservation Name *</label>
+    <input type="text" id="resName-en" name="reservation_name" required autocomplete="name" />
+
+    <label for="people-en">People Amount (1-6) *</label>
+    <input type="number" id="people-en" name="people_amount" min="1" max="6" value="1" required />
+
+    <label for="date-en">Date *</label>
+    <input type="date" id="date-en" name="date" required />
+
+    <label for="time-en">Time (11:00 - 20:00) *</label>
+    <input type="time" id="time-en" name="time" min="11:00" max="20:00" required />
+
+    <label for="email-en">Email *</label>
+    <input type="email" id="email-en" name="email" autocomplete="email" required />
+
+    <label>Food Selection (optional)</label>
+    <div id="food-list-en"></div>
+    <button type="button" id="add-food-btn-en">+ Add Item</button>
+
+    <label class="checkbox-label" for="tos-en">
+      <input type="checkbox" id="tos-en" name="tos" required />
+      I agree to the <a href="https://www.google.com" target="_blank" rel="noopener noreferrer">Terms of Service</a>
+    </label>
+
+    <div id="error-en" class="error-message"></div>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <!-- Reservation Form (Lithuanian) -->
+  <form id="form-lt" class="reservation-form" novalidate>
+    <h1>Rezervacijos Forma</h1>
+
+    <label for="resName-lt">Rezervacijos vardas *</label>
+    <input type="text" id="resName-lt" name="reservation_name" required autocomplete="name" />
+
+    <label for="people-lt">Žmonių kiekis (1-6) *</label>
+    <input type="number" id="people-lt" name="people_amount" min="1" max="6" value="1" required />
+
+    <label for="date-lt">Data *</label>
+    <input type="date" id="date-lt" name="date" required />
+
+    <label for="time-lt">Laikas (11:00 - 20:00) *</label>
+    <input type="time" id="time-lt" name="time" min="11:00" max="20:00" required />
+
+    <label for="email-lt">El. paštas *</label>
+    <input type="email" id="email-lt" name="email" autocomplete="email" required />
+
+    <label>Maisto pasirinkimas (neprivaloma)</label>
+    <div id="food-list-lt"></div>
+    <button type="button" id="add-food-btn-lt">+ Pridėti</button>
+
+    <label class="checkbox-label" for="tos-lt">
+      <input type="checkbox" id="tos-lt" name="tos" required />
+      Sutinku su <a href="https://www.google.com" target="_blank" rel="noopener noreferrer">Naudojimo sąlygomis</a>
+    </label>
+
+    <div id="error-lt" class="error-message"></div>
+
+    <button type="submit">Siųsti</button>
+  </form>
+</div>
+
+<script>
+(() => {
+  // Elements & state
+  const langSelect = document.getElementById('language-select');
+  const btnEn = document.getElementById('lang-en');
+  const btnLt = document.getElementById('lang-lt');
+  const formEn = document.getElementById('form-en');
+  const formLt = document.getElementById('form-lt');
+
+  // Food data (English / Lithuanian)
+  const menu = {
+    en: {
+      categories: ["Appetizers", "Breakfast", "Main Courses", "Sides", "Desserts"],
+      items: {
+        "Appetizers": [
+          "Crackers with vegetables",
+          "Ham platter with bread slice",
+          "Burrata",
+          "Bread with butter and olives"
+        ],
+        "Breakfast": [
+          "Granola with yogurt and jam",
+          "Omelet",
+          "French toast",
+          "Avocado toast",
+          "Fried eggs with bacon"
+        ],
+        "Main Courses": [
+          "Fried dumplings",
+          "Boiled dumplings",
+          "Burger",
+          "Steak",
+          "Salmon",
+          "Sea bass"
+        ],
+        "Sides": [
+          "Green salad",
+          "Broccoli with carrots"
+        ],
+        "Desserts": [
+          "Chocolate fondant",
+          "Cake of the day with ice cream"
+        ]
+      },
+      timeRestrictions: {
+        "Breakfast": {start: "11:00", end: "14:00"}
+        // Others no restrictions
+      }
+    },
+    lt: {
+      categories: ["Užkandžiai", "Pusryčiai", "Pagrindiniai", "Priedai", "Desertai"],
+      items: {
+        "Užkandžiai": [
+          "Traškučiai su daržovėmis",
+          "Kumpio lėkštė su duonele",
+          "Burrata",
+          "Duonelė su sviestu ir alyvuogėmis"
+        ],
+        "Pusryčiai": [
+          "Granola su jogurtu ir uogiene",
+          "Omletas",
+          "Prancūziškas skrebutis",
+          "Avokado skrebutis",
+          "Kepti kiaušiniai su šonine"
+        ],
+        "Pagrindiniai": [
+          "Kepti koldūnai",
+          "Virti koldūnai",
+          "Mėsainis",
+          "Kepsnys",
+          "Lašiša",
+          "Jūrinis ešerys"
+        ],
+        "Priedai": [
+          "Žalios salotos",
+          "Brokoliai su morkomis"
+        ],
+        "Desertai": [
+          "Šokoladinis fondantas",
+          "Dienos pyragas su ledais"
+        ]
+      },
+      timeRestrictions: {
+        "Pusryčiai": {start: "11:00", end: "14:00"}
+      }
+    }
+  };
+
+  // Helper: convert HH:MM to minutes for easy compare
+  function timeToMinutes(t) {
+    const [h,m] = t.split(":").map(Number);
+    return h*60+m;
+  }
+
+  // Validate time range: reservation time 11:00-20:00 enforced by input min/max, no need again here
+
+  // Show/hide language forms
+  function showForm(lang) {
+    langSelect.style.display = 'none';
+    if(lang === 'en'){
+      formEn.classList.add('active');
+      formLt.classList.remove('active');
+    } else {
+      formLt.classList.add('active');
+      formEn.classList.remove('active');
+    }
+  }
+
+  btnEn.addEventListener('click', () => {
+    btnEn.setAttribute('aria-pressed', 'true');
+    btnLt.setAttribute('aria-pressed', 'false');
+    showForm('en');
+    initForm('en');
+  });
+  btnLt.addEventListener('click', () => {
+    btnLt.setAttribute('aria-pressed', 'true');
+    btnEn.setAttribute('aria-pressed', 'false');
+    showForm('lt');
+    initForm('lt');
+  });
+
+  // Food selection logic per form
+  function initForm(lang) {
+    const form = lang === 'en' ? formEn : formLt;
+    const foodList = form.querySelector(`#food-list-${lang}`);
+    const addBtn = form.querySelector(`#add-food-btn-${lang}`);
+    const errorDiv = form.querySelector(`#error-${lang}`);
+
+    // Set min date = today + 2 days
+    const dateInput = form.querySelector('input[type="date"]');
+    const today = new Date();
+    today.setDate(today.getDate() + 2);
+    dateInput.min = today.toISOString().split('T')[0];
+
+    // Clear previous food items
+    foodList.innerHTML = '';
+
+    // Add food item row
+    function addFoodItem() {
+      const idx = foodList.children.length;
+      const wrapper = document.createElement('div');
+      wrapper.className = 'food-item';
+
+      // Category select
+      const catSelect = document.createElement('select');
+      catSelect.name = `food_category_${idx}`;
+      catSelect.required = false;
+
+      // Add categories options
+      const catOpts = menu[lang].categories;
+      catSelect.appendChild(new Option(lang === 'en' ? "Select category" : "Pasirinkite kategoriją", ""));
+      for (const cat of catOpts) {
+        catSelect.appendChild(new Option(cat, cat));
+      }
+
+      // Item select
+      const itemSelect = document.createElement('select');
+      itemSelect.name = `food_item_${idx}`;
+      itemSelect.required = false;
+      itemSelect.disabled = true;
+      itemSelect.appendChild(new Option(lang === 'en' ? "Select item" : "Pasirinkite patiekalą", ""));
+
+      // Quantity input
+      const qtyInput = document.createElement('input');
+      qtyInput.type = 'number';
+      qtyInput.name = `food_qty_${idx}`;
+      qtyInput.min = 1;
+      qtyInput.max = 100;
+      qtyInput.value = 1;
+      qtyInput.required = false;
+
+      // Remove button
+      const removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.className = 'remove-item';
+      removeBtn.textContent = lang === 'en' ? 'Remove' : 'Pašalinti';
+
+      // Append elements
+      wrapper.appendChild(catSelect);
+      wrapper.appendChild(itemSelect);
+      wrapper.appendChild(qtyInput);
+      wrapper.appendChild(removeBtn);
+      foodList.appendChild(wrapper);
+
+      // Update item options when category changes
+      catSelect.addEventListener('change', () => {
+        itemSelect.innerHTML = '';
+        const catVal = catSelect.value;
+        if(!catVal){
+          itemSelect.disabled = true;
+          itemSelect.appendChild(new Option(lang === 'en' ? "Select item" : "Pasirinkite patiekalą", ""));
+          return;
+        }
+        // Time restriction check
+        const timeVal = form.querySelector('input[type="time"]').value;
+        const items = menu[lang].items[catVal] || [];
+
+        // Check if this category is time-restricted breakfast and if time is out of range, disable all items
+        const tr = menu[lang].timeRestrictions[catVal];
+        let allowed = true;
+        if(tr && timeVal) {
+          const tMins = timeToMinutes(timeVal);
+          if(tMins < timeToMinutes(tr.start) || tMins > timeToMinutes(tr.end)){
+            allowed = false;
+          }
+        }
+
+        if(!allowed) {
+          itemSelect.disabled = true;
+          itemSelect.appendChild(new Option(lang === 'en' ? "Unavailable at this time" : "Šiuo metu nepasiekiama", ""));
+          return;
+        }
+
+        itemSelect.disabled = false;
+        itemSelect.appendChild(new Option(lang === 'en' ? "Select item" : "Pasirinkite patiekalą", ""));
+        for (const it of items) {
+          itemSelect.appendChild(new Option(it, it));
+        }
+      });
+
+      // Remove item event
+      removeBtn.addEventListener('click', () => {
+        foodList.removeChild(wrapper);
+        // Re-index names
+        Array.from(foodList.children).forEach((child, i) => {
+          child.querySelector('select[name^="food_category_"]').name = `food_category_${i}`;
+          child.querySelector('select[name^="food_item_"]').name = `food_item_${i}`;
+          child.querySelector('input[name^="food_qty_"]').name = `food_qty_${i}`;
+        });
+      });
+
+      // Also update itemSelect when time changes (for time restrictions)
+      form.querySelector('input[type="time"]').addEventListener('change', () => {
+        // Trigger change on catSelect to update itemSelect options
+        const event = new Event('change');
+        catSelect.dispatchEvent(event);
+      });
+    }
+
+    addBtn.onclick = () => addFoodItem();
+
+    // Form submit handler
+    form.onsubmit = async (e) => {
+      e.preventDefault();
+      errorDiv.style.display = 'none';
+      errorDiv.textContent = '';
+
+      if(!form.checkValidity()){
+        errorDiv.textContent = lang === 'en' ? 'Please fill all required fields correctly.' : 'Prašome teisingai užpildyti privalomus laukus.';
+        errorDiv.style.display = 'block';
+        return;
+      }
+
+      // Additional validation:
+      // Date must be min 2 days from today (already set min)
+      const dateVal = form.querySelector('input[type="date"]').value;
+      if(!dateVal){
+        errorDiv.textContent = lang === 'en' ? 'Please select a valid date.' : 'Prašome pasirinkti tinkamą datą.';
+        errorDiv.style.display = 'block';
+        return;
+      }
+      const chosenDate = new Date(dateVal);
+      const minDate = new Date();
+      minDate.setDate(minDate.getDate() + 2);
+      minDate.setHours(0,0,0,0);
+      if(chosenDate < minDate){
+        errorDiv.textContent = lang === 'en' ? 'Reservation date must be at least 2 days from today.' : 'Rezervacijos data turi būti ne anksčiau nei po 2 dienų.';
+        errorDiv.style.display = 'block';
+        return;
+      }
+
+      // Time range check (11:00-20:00)
+      const timeVal = form.querySelector('input[type="time"]').value;
+      if(!timeVal || timeVal < '11:00' || timeVal > '20:00'){
+        errorDiv.textContent = lang === 'en' ? 'Reservation time must be between 11:00 and 20:00.' : 'Rezervacijos laikas turi būti nuo 11:00 iki 20:00.';
+        errorDiv.style.display = 'block';
+        return;
+      }
+
+      // Check breakfast items allowed only 11-14
+      const breakfastCat = lang === 'en' ? "Breakfast" : "Pusryčiai";
+      const breakfastTR = menu[lang].timeRestrictions[breakfastCat];
+
+      const foodCats = Array.from(form.querySelectorAll('select[name^="food_category_"]')).map(s => s.value);
+      if(foodCats.includes(breakfastCat)){
+        if(timeVal < breakfastTR.start || timeVal > breakfastTR.end){
+          errorDiv.textContent = lang === 'en' ?
+            'Breakfast items can only be selected between 11:00 and 14:00.' :
+            'Pusryčių patiekalai galimi tik nuo 11:00 iki 14:00.';
+          errorDiv.style.display = 'block';
+          return;
+        }
+      }
+
+      // Prepare form data for submission
+      const fd = new FormData(form);
+      fd.append('tos', form.querySelector('input[name="tos"]').checked ? 'agreed' : 'not agreed');
+
+      // Post to formspree
+      try {
+        const response = await fetch('https://formspree.io/f/xrblgdle', {
+          method: 'POST',
+          body: fd,
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
+        if(response.ok){
+          window.location.href = lang === 'en' ? 'thankyou.html' : 'thankyou.html';
+        } else {
+          const data = await response.json();
+          errorDiv.textContent = data.error || (lang === 'en' ? 'An error occurred. Please try again.' : 'Įvyko klaida. Bandykite dar kartą.');
+          errorDiv.style.display = 'block';
+        }
+      } catch (err) {
+        errorDiv.textContent = lang === 'en' ? 'Network error. Please try again later.' : 'Tinklo klaida. Bandykite vėliau.';
+        errorDiv.style.display = 'block';
+      }
+    };
+  }
+
+  // Initially no form shown, wait for language select
+
+})();
+</script>
+
+</body>
+</html>
